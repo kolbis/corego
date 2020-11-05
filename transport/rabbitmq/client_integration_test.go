@@ -6,7 +6,6 @@ import (
 	tlectx "github.com/kolbis/corego/context"
 	tlelogger "github.com/kolbis/corego/logger"
 	"github.com/kolbis/corego/transport/rabbitmq"
-	"github.com/kolbis/usergo/shared"
 )
 
 type loggedInCommandData struct {
@@ -25,7 +24,7 @@ const (
 
 func TestPublishMessage(t *testing.T) {
 	ctx := tlectx.Root()
-	req := shared.LoggedInCommandData{ID: 1, Name: "guy kolbis"}
+	req := loggedInCommandData{ID: 1, Name: "guy kolbis"}
 	message := rabbitmq.NewMessage(req, "thelotter.userloggedin")
 
 	logManager := tlelogger.NewNopLogger()
