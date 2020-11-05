@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/kolbis/corego/errors"
 	tlelogger "github.com/kolbis/corego/logger"
@@ -11,7 +10,7 @@ import (
 // Client is a rabbit contract to publish and consume messages
 // It provide an easy access to the publish anc consume APIs
 type Client interface {
-	Consume(context.Context)
+	Consume(context.Context) error
 	Publish(context.Context, *Message, string) error
 	Close(context.Context) error
 }
@@ -36,22 +35,26 @@ func NewClient(connMgr *ConnectionManager, logManager tlelogger.Logger, publishe
 
 // Consume will call consume on all the subscribers
 // For each subscriber it will create a new go routine and will wait on it for incoming messages
-func (c *client) Consume(ctx context.Context) {
+func (c *client) Consume(ctx context.Context) error {
 	conn := *c.connectionManager
 	for _, sub := range *c.subscribers {
 		ch, err := conn.GetChannel()
+		if err != nil {
+			tlelogger.ErrorWithContext(ctx, c.logger, "failed to run consume: %s", err.Error())
+			return err
+		}
 		messages, err := sub.Consume(ch)
 
 		if err == nil {
 			go func() {
 				for msg := range messages {
-					//TODO: replace with logger
-					fmt.Printf("Received message: %s", msg.Body)
+					tlelogger.DebugWithContext(ctx, c.logger, "received message: %s", msg.Body)
 					sub.KitSubscriber.ServeDelivery(sub.Channel)(&msg)
 				}
 			}()
 		}
 	}
+	return nil
 }
 
 // Publish will call the publisher to publish the message

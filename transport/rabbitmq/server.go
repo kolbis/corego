@@ -2,7 +2,6 @@ package rabbitmq
 
 import (
 	"context"
-	"fmt"
 
 	tlelogger "github.com/kolbis/corego/logger"
 	tletracer "github.com/kolbis/corego/tracer"
@@ -33,25 +32,22 @@ func NewServer(logger tlelogger.Logger, tracer tletracer.Tracer, rabbit *Client,
 
 // Run will start all the listening on all the consumers
 func (s server) Run(ctx context.Context) error {
-	// cleaning up
 	defer s.Shutdown(ctx)
 
 	forever := make(chan bool)
-
 	c := *s.client
-	c.Consume(ctx)
+	err := c.Consume(ctx)
 
-	<-forever
+	if err == nil {
+		<-forever
+	}
 
-	return nil
+	return err
 }
 
 // Shutdown will close the server and call client to close resources
 func (s server) Shutdown(ctx context.Context) {
-	// TODO: should be log
-	fmt.Print("Shutdown amqp server")
-
+	tlelogger.DebugWithContext(ctx, s.logger, "shutdown amqp server")
 	c := *s.client
 	c.Close(ctx)
-
 }
