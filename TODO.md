@@ -1,1 +1,4 @@
 - check timeout is inforce when calling rest API
+
+
+GO KIT is one of the popular toolkit for building microservices in GO. It does a lot of heavy lifting when you get started. Yet, while working with Go Kit, I found there are still missing important concepts, such as configuration management, transporting context between microservices, working with databases, handling execution fallbacks and more. corego tries to be more opinionated and focus on consul and coreDNS for service discovery, consul as, remote KV, zap as logger, zipkin for tracing, cassandra, elastic, mongo for databases and rabbit for amqp transport

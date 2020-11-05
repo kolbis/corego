@@ -55,7 +55,7 @@
 
 [GO-KIT](https://github.com/go-kit/kit) is one of the popular toolkit for building microservices in GO. It does a lot of heavy lifting when you get started. 
 
-Go-Kit is opinionated in the way you need to strcuture your microservices (transport layer, endpoint layer and service layer) which ensure a common standard among the development teams. 
+Go-Kit is opinionated in the way you need to structure your microservices (transport layer, endpoint layer and service layer) which ensures a common standard among the development teams. 
 
 Out of the box, you are getting different integrations to tracing, logging, transporting, service discovery and metrics. 
 
@@ -64,14 +64,14 @@ Yet, while working with Go-Kit, I found there are still missing important concep
 - transporting context between microservices
 - working with databases
 - handling execution fallbacks
-- working with errors. 
+- working with errors
 
-Also, corego tries to be more opinionated and focus on selected integrations:
+Corego tries to be more opinionated and focus on selected integrations:
 - consul and coreDNS for service discovery
 - consul as remote KV
 - zap as logger
 - prometheos and datadog for metrics
-- zipken for tracing
+- zipkin for tracing
 - cassandra, elastic, mongo for databases
 - rabbit for amqp transport
 
